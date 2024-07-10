@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otp_debug/custom_timer.dart';
 import 'package:otp_debug/model/login_model.dart';
 import 'package:otp_debug/model/registration_model.dart';
 
@@ -241,7 +242,7 @@ class _OnboardingOtpScreenState extends State<OnboardingOtpScreen> {
   }
 
   Future<void> processForResetPassword() async {
-    Navigator.popAndPush(
+    Navigator.popAndPushNamed(
       context,
       MaterialPageRoute(
         builder: (context) => NewPasswordScreen(

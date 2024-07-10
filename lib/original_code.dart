@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class OnboardingOtpScreen extends StatefulWidget {
   OnboardingOtpScreen(
       {Key? key,
