@@ -1,13 +1,21 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:otp_debug/classes/bloc/view_bloc.dart';
+import 'package:otp_debug/classes/bloc/bloc/otp_bloc.dart';
+import 'package:otp_debug/classes/bloc/bloc/registration_bloc.dart';
+import 'package:otp_debug/classes/bloc/bloc/user_bloc.dart';
+import 'package:otp_debug/classes/models/sent_otp_bean.dart';
+import 'package:otp_debug/classes/nui_navigator.dart';
 import 'package:otp_debug/classes/otp_option.dart';
 import 'package:otp_debug/classes/otp_verify_purpose.dart';
 import 'package:otp_debug/classes/registration_bean.dart';
+import 'package:otp_debug/classes/models/send_otp_bean.dart';
 import 'package:otp_debug/classes/ui_theme.dart';
 import 'package:otp_debug/classes/user_profile_bean.dart';
 import 'package:otp_debug/custom_timer.dart';
+import 'package:otp_debug/screens/base_screen.dart';
+import 'package:otp_debug/screens/new_password_screen.dart';
+import 'package:otp_debug/screens/success_screen.dart';
 
 class OnboardingOtpScreen extends StatefulWidget {
   OnboardingOtpScreen(
@@ -146,7 +154,7 @@ class _OnboardingOtpScreenState extends State<OnboardingOtpScreen> {
     bool isCustomer = widget.registrationBean?.isCustomer ?? false;
     if (!isCustomer) {
       final result = await _registrationBloc.sendValidationEmail(
-          _sendOTPBean.userId, _sendOTPBean.email ?? "", context);
+          _sendOTPBean.userId, _sendOTPBean.email, context);
       if (result) {
         final completed = await ViewBloc.showAlertDialog(context,
             title:
@@ -175,7 +183,7 @@ class _OnboardingOtpScreenState extends State<OnboardingOtpScreen> {
                 title: mtl("regisSuccess"),
                 description: mtl("regisSuccessDesc"),
                 illus: loadSvg("pictogram/correct_tick.svg", color: null),
-                popAll: true));
+                popAll: true) as Widget);
       } else {
         // Account activation failed, redirect to base screen
         await Future.delayed(const Duration(milliseconds: 80));
@@ -198,7 +206,7 @@ class _OnboardingOtpScreenState extends State<OnboardingOtpScreen> {
         await Future.delayed(const Duration(milliseconds: 80));
         // await ViewBloc.showSuccessDialogForAwhile(context, successMessage: mtl("loginSuccessDialog"));
         NUINavigator.push(
-            context, SuccessScreen(title: mtl("verifySuccess"), popAll: true));
+            context, SuccessScreen(title: mtl("verifySuccess"), popAll: true) as Widget);
       } catch (e) {
         logNUI("Otp Screen", "First-time Login Error : $e");
         await ViewBloc.showFailedDialogForAwhile(
